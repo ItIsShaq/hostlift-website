@@ -1335,7 +1335,7 @@
         <div class="order-form-title">
           Complete Your Order — <span id="orderPlanLabel"></span>
         </div>
-        <form id="orderForm" onsubmit="handleOrderSubmit(event)">
+        <form id="orderForm">
           <input type="hidden" name="_subject" value="🛒 New Order — HostLift" />
           <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
           <input type="hidden" name="plan" id="orderPlanInput" />
@@ -1616,7 +1616,7 @@
 
       <div class="contact-form-wrap">
         <div class="form-title">Request Your Free Audit</div>
-        <form id="auditForm" onsubmit="handleSubmit(event)" action="https://formspree.io/f/xreypnkw" method="POST">
+        <form id="auditForm" action="https://formspree.io/f/xreypnkw" method="POST">
           <!-- Honeypot spam protection -->
           <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
           <input type="hidden" name="_subject" value="🏠 New Free Listing Audit Request — HostLift" />
@@ -1684,174 +1684,141 @@
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  // Pricing plan selection — clean data-attribute approach
-  document.querySelectorAll('.pricing-card').forEach(function(card) {
-    card.addEventListener('click', function() {
-      var plan      = card.getAttribute('data-plan');
-      var price     = card.getAttribute('data-price');
-      var label     = card.getAttribute('data-label');
-      var num       = parseInt(card.getAttribute('data-num'));
-
-      document.querySelectorAll('.pricing-card').forEach(function(c) { c.classList.remove('selected'); });
-      card.classList.add('selected');
-
-      document.getElementById('orderPlanInput').value  = plan;
-      document.getElementById('orderPriceInput').value = price;
-      document.getElementById('orderPlanLabel').textContent = num + (num === 1 ? ' Listing' : ' Listings') + ' — ' + label;
-      document.getElementById('summaryPlan').textContent    = num + (num === 1 ? ' Listing' : ' Listings');
-      document.getElementById('summaryPrice').textContent   = label;
-
-      var container = document.getElementById('listingUrlFields');
-      container.innerHTML = '';
-      for (var i = 1; i <= num; i++) {
-        var div = document.createElement('div');
-        div.className = 'form-group';
-        div.innerHTML = '<label>Airbnb Listing URL' + (num > 1 ? ' #' + i : '') + '</label>' +
-          '<input type="url" name="listing_url_' + i + '" placeholder="https://airbnb.com/rooms/..." required />';
-        container.appendChild(div);
-      }
-
-      var wrap = document.getElementById('orderFormWrap');
-      wrap.style.display = 'block';
-      setTimeout(function() { wrap.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 150);
-    });
-  });
-
-  // Attach click handlers after DOM is ready
+<script>
   document.addEventListener('DOMContentLoaded', function() {
+
+    // ── Pricing plan selection ──────────────────────────────
     document.querySelectorAll('.pricing-card').forEach(function(card) {
       card.addEventListener('click', function() {
-        const onclick = card.getAttribute('onclick');
-        if (onclick) eval(onclick.replace('selectPlan(this,', 'selectPlan(card,'));
+        var plan  = card.getAttribute('data-plan');
+        var price = card.getAttribute('data-price');
+        var label = card.getAttribute('data-label');
+        var num   = parseInt(card.getAttribute('data-num'));
+
+        document.querySelectorAll('.pricing-card').forEach(function(c) { c.classList.remove('selected'); });
+        card.classList.add('selected');
+
+        document.getElementById('orderPlanInput').value = plan;
+        document.getElementById('orderPriceInput').value = price;
+        document.getElementById('orderPlanLabel').textContent = num + (num === 1 ? ' Listing' : ' Listings') + ' — ' + label;
+        document.getElementById('summaryPlan').textContent = num + (num === 1 ? ' Listing' : ' Listings');
+        document.getElementById('summaryPrice').textContent = label;
+
+        var container = document.getElementById('listingUrlFields');
+        container.innerHTML = '';
+        for (var i = 1; i <= num; i++) {
+          var div = document.createElement('div');
+          div.className = 'form-group';
+          div.innerHTML = '<label>Airbnb Listing URL' + (num > 1 ? ' #' + i : '') + '</label>' +
+            '<input type="url" name="listing_url_' + i + '" placeholder="https://airbnb.com/rooms/..." required />';
+          container.appendChild(div);
+        }
+
+        var wrap = document.getElementById('orderFormWrap');
+        wrap.style.display = 'block';
+        setTimeout(function() { wrap.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 150);
       });
     });
-  });
 
-  // Order form submission → Formspree then PayPal
-  async function handleOrderSubmit(e) {
-    e.preventDefault();
-    const form = document.getElementById('orderForm');
-    const btn = form.querySelector('.btn-submit');
-    const success = document.getElementById('orderSuccess');
-
-    btn.textContent = 'Processing…';
-    btn.disabled = true;
-
-    try {
-      const response = await fetch('https://formspree.io/f/xreypnkw', {
-        method: 'POST',
-        body: new FormData(form),
-        headers: { 'Accept': 'application/json' }
-      });
-
-      if (response.ok) {
-        const price = document.getElementById('orderPriceInput').value.replace('$', '');
-        const plan = document.getElementById('orderPlanInput').value;
-        const email = form.querySelector('input[name="email"]').value;
-
-        // Redirect to PayPal
-        const paypalUrl = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=shaq.sahbi1%40gmail.com&item_name=HostLift+Optimization+%28${encodeURIComponent(plan)}%29&amount=${price}&currency_code=USD&buyer_email=${encodeURIComponent(email)}&no_shipping=1&return=https%3A%2F%2Fhostlift.online`;
-
-        form.style.display = 'none';
-        success.style.display = 'block';
-
-        setTimeout(() => {
-          window.location.href = paypalUrl;
-        }, 2000);
-      } else {
-        throw new Error('Error');
-      }
-    } catch (err) {
-      btn.textContent = '✦ Proceed to PayPal Payment';
-      btn.disabled = false;
-      alert('Something went wrong. Please try again or contact us at contact@hostlift.online');
-    }
-  }
-
-
-  const navbar = document.getElementById('navbar');
-  window.addEventListener('scroll', () => {
-    navbar.classList.toggle('scrolled', window.scrollY > 20);
-  });
-
-  // Smooth scroll for anchor links
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-      const target = document.querySelector(this.getAttribute('href'));
-      if (target) {
+    // ── Order form submit ───────────────────────────────────
+    var orderForm = document.getElementById('orderForm');
+    if (orderForm) {
+      orderForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        const offset = 80;
-        const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
-        window.scrollTo({ top, behavior: 'smooth' });
-      }
-    });
-  });
+        var btn = orderForm.querySelector('.btn-submit');
+        var success = document.getElementById('orderSuccess');
+        btn.textContent = 'Processing…';
+        btn.disabled = true;
 
-  // Form submission via Formspree
-  async function handleSubmit(e) {
-    e.preventDefault();
-    const form = document.getElementById('auditForm');
-    const btn = form.querySelector('.btn-submit');
-    const success = document.getElementById('formSuccess');
-    const errorMsg = document.getElementById('formError');
-
-    btn.textContent = 'Sending…';
-    btn.disabled = true;
-    errorMsg.style.display = 'none';
-
-    const data = {
-      firstName:  form.firstName.value,
-      lastName:   form.lastName.value,
-      email:      form.email.value,
-      listingUrl: form.listingUrl.value,
-      city:       form.city.value,
-      message:    form.message.value,
-    };
-
-    try {
-      const response = await fetch('https://formspree.io/f/xreypnkw', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(data)
+        fetch('https://formspree.io/f/xreypnkw', {
+          method: 'POST',
+          body: new FormData(orderForm),
+          headers: { 'Accept': 'application/json' }
+        }).then(function(res) {
+          if (res.ok) {
+            var price = document.getElementById('orderPriceInput').value;
+            var plan  = document.getElementById('orderPlanInput').value;
+            var email = orderForm.querySelector('input[name="email"]').value;
+            var paypalUrl = 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=shaq.sahbi1%40gmail.com&item_name=HostLift+Optimization+(' + encodeURIComponent(plan) + ')&amount=' + price + '&currency_code=USD&no_shipping=1';
+            orderForm.style.display = 'none';
+            success.style.display = 'block';
+            setTimeout(function() { window.location.href = paypalUrl; }, 2000);
+          } else {
+            throw new Error('error');
+          }
+        }).catch(function() {
+          btn.textContent = '✦ Proceed to PayPal Payment';
+          btn.disabled = false;
+          alert('Something went wrong. Please email contact@hostlift.online');
+        });
       });
-
-      const result = await response.json();
-
-      if (response.ok && result.ok) {
-        form.style.display = 'none';
-        success.style.display = 'block';
-      } else {
-        throw new Error(result.error || 'Formspree rejected the submission');
-      }
-    } catch (err) {
-      console.error('Formspree error:', err);
-      btn.textContent = '✦ Send My Free Audit Request';
-      btn.disabled = false;
-      errorMsg.style.display = 'block';
     }
-  }
 
-  // Scroll-reveal animation
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.opacity = '1';
-        entry.target.style.transform = 'translateY(0)';
-        revealObserver.unobserve(entry.target);
-      }
+    // ── Audit form submit ───────────────────────────────────
+    var auditForm = document.getElementById('auditForm');
+    if (auditForm) {
+      auditForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var btn = auditForm.querySelector('.btn-submit');
+        var success = document.getElementById('formSuccess');
+        var errorMsg = document.getElementById('formError');
+        btn.textContent = 'Sending…';
+        btn.disabled = true;
+
+        fetch('https://formspree.io/f/xreypnkw', {
+          method: 'POST',
+          body: new FormData(auditForm),
+          headers: { 'Accept': 'application/json' }
+        }).then(function(res) {
+          if (res.ok) {
+            auditForm.style.display = 'none';
+            success.style.display = 'block';
+          } else { throw new Error('error'); }
+        }).catch(function() {
+          btn.textContent = '✦ Send My Free Audit Request';
+          btn.disabled = false;
+          if (errorMsg) errorMsg.style.display = 'block';
+        });
+      });
+    }
+
+    // ── Nav scroll ──────────────────────────────────────────
+    var navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', function() {
+      navbar.classList.toggle('scrolled', window.scrollY > 20);
     });
-  }, { threshold: 0.1 });
 
-  document.querySelectorAll('.service-card, .testi-card, .about-feature, .contact-perk').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(20px)';
-    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-    revealObserver.observe(el);
-  });
+    // ── Smooth scroll ───────────────────────────────────────
+    document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+      anchor.addEventListener('click', function(e) {
+        var target = document.querySelector(anchor.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          var top = target.getBoundingClientRect().top + window.pageYOffset - 80;
+          window.scrollTo({ top: top, behavior: 'smooth' });
+        }
+      });
+    });
+
+    // ── Scroll reveal ───────────────────────────────────────
+    var revealObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.service-card, .testi-card, .about-feature, .contact-perk').forEach(function(el) {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+      revealObserver.observe(el);
+    });
+
+  }); // end DOMContentLoaded
 
   // Animate stat numbers on scroll
   const statObserver = new IntersectionObserver((entries) => {
