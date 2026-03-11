@@ -1276,7 +1276,7 @@
     <div class="pricing-grid">
 
       <!-- Plan 1 -->
-      <div class="pricing-card" data-plan="1listing" data-price="59.99" data-label="$59.99" data-num="1">
+      <div class="pricing-card">
         <div class="plan-name">Starter</div>
         <div class="plan-price">$59.99</div>
         <div class="plan-desc">Perfect for hosts with a single property ready to dominate their market.</div>
@@ -1288,11 +1288,11 @@
           <li>✦ Pricing Strategy Report</li>
           <li>✦ 72h Turnaround</li>
         </ul>
-        <div class="plan-select-btn">Select Plan</div>
+        <a class="plan-btn" href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=shaq.sahbi1%40gmail.com&item_name=HostLift+Starter+1+Listing&amount=59.99&currency_code=USD&no_shipping=1" target="_blank">Buy Now — $59.99</a>
       </div>
 
       <!-- Plan 2 -->
-      <div class="pricing-card featured-plan" data-plan="2listings" data-price="99.99" data-label="$99.99" data-num="2">
+      <div class="pricing-card featured-plan">
         <div class="plan-badge">Most Popular</div>
         <div class="plan-name">Growth</div>
         <div class="plan-price">$99.99</div>
@@ -1306,11 +1306,11 @@
           <li>✦ 48h Turnaround</li>
           <li>✦ Competitor Analysis</li>
         </ul>
-        <div class="plan-select-btn">Select Plan</div>
+        <a class="plan-btn" href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=shaq.sahbi1%40gmail.com&item_name=HostLift+Growth+2+Listings&amount=99.99&currency_code=USD&no_shipping=1" target="_blank">Buy Now — $99.99</a>
       </div>
 
       <!-- Plan 3 -->
-      <div class="pricing-card" data-plan="5listings" data-price="199.99" data-label="$199.99" data-num="5">
+      <div class="pricing-card">
         <div class="plan-name">Portfolio</div>
         <div class="plan-price">$199.99</div>
         <div class="plan-desc">Built for serious hosts with multiple properties who want maximum revenue.</div>
@@ -1324,253 +1324,54 @@
           <li>✦ Competitor Analysis</li>
           <li>✦ Dedicated Account Manager</li>
         </ul>
-        <div class="plan-select-btn">Select Plan</div>
+        <a class="plan-btn" href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=shaq.sahbi1%40gmail.com&item_name=HostLift+Portfolio+5+Listings&amount=199.99&currency_code=USD&no_shipping=1" target="_blank">Buy Now — $199.99</a>
       </div>
 
     </div>
 
-    <!-- Order Form (hidden until plan selected) -->
-    <div id="orderFormWrap" style="display:none;">
-      <div class="order-form-inner">
-        <div class="order-form-title">
-          Complete Your Order — <span id="orderPlanLabel"></span>
-        </div>
-        <form id="orderForm">
-          <input type="hidden" name="_subject" value="🛒 New Order — HostLift" />
-          <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
-          <input type="hidden" name="plan" id="orderPlanInput" />
-          <input type="hidden" name="price" id="orderPriceInput" />
-
-          <div class="form-row">
-            <div class="form-group">
-              <label>First Name</label>
-              <input type="text" name="firstName" placeholder="Marcus" required />
-            </div>
-            <div class="form-group">
-              <label>Last Name</label>
-              <input type="text" name="lastName" placeholder="Rodriguez" required />
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label>Email Address</label>
-              <input type="email" name="email" placeholder="you@example.com" required />
-            </div>
-            <div class="form-group">
-              <label>Phone Number</label>
-              <input type="tel" name="phone" placeholder="+1 305 000 0000" required />
-            </div>
-          </div>
-
-          <!-- Dynamic listing URL fields -->
-          <div id="listingUrlFields"></div>
-
-          <div class="form-group">
-            <label>Special Requests / Notes</label>
-            <textarea name="notes" placeholder="Any specific goals, target guests, or things you'd like us to focus on..."></textarea>
-          </div>
-
-          <div class="order-summary">
-            <div class="order-summary-row">
-              <span>Plan</span>
-              <span id="summaryPlan"></span>
-            </div>
-            <div class="order-summary-row">
-              <span>Total</span>
-              <span id="summaryPrice" style="font-weight:700;color:var(--accent);font-size:1.1rem;"></span>
-            </div>
-          </div>
-
-          <button type="submit" class="btn-submit" style="margin-top:20px;">
-            ✦ Proceed to PayPal Payment
-          </button>
-          <p class="form-note" style="color:rgba(26,21,16,.4);">You'll be redirected to PayPal to complete payment securely.</p>
-        </form>
-        <div id="orderSuccess" style="display:none;text-align:center;padding:40px 0;">
-          <div style="font-size:3rem;margin-bottom:16px;">🎉</div>
-          <div style="font-family:var(--serif);font-size:1.5rem;font-weight:700;color:var(--dark);margin-bottom:10px;">Order Received!</div>
-          <div style="color:var(--soft);font-size:.95rem;">Complete your payment on PayPal and we'll start your optimization within 24 hours. Check your email for confirmation.</div>
-        </div>
-      </div>
-    </div>
+    <p style="text-align:center;margin-top:28px;font-size:.85rem;color:var(--soft);">
+      After payment, email your listing URL(s) to <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ddbeb2b3a9bcbea99db5b2aea9b1b4bba9f3b2b3b1b4b3b8">[email&#160;protected]</a></strong> and we will get started within 24h.
+    </p>
   </div>
 </section>
 
 <style>
-  #pricing {
-    padding: 100px 0;
-    background: var(--cream);
-  }
-  .pricing-header {
-    text-align: center;
-    margin-bottom: 56px;
-  }
+  #pricing { padding: 100px 0; background: var(--cream); }
+  .pricing-header { text-align: center; margin-bottom: 56px; }
   .pricing-header .section-sub { margin: 14px auto 0; text-align: center; }
-  .pricing-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-    align-items: start;
-  }
+  .pricing-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; align-items: start; }
   .pricing-card {
     background: white;
     border: 2px solid rgba(200,169,126,.2);
     border-radius: 20px;
     padding: 36px 28px;
-    cursor: pointer;
-    transition: transform .3s, border-color .3s, box-shadow .3s;
-    position: relative;
+    transition: transform .3s, box-shadow .3s;
   }
-  .pricing-card:hover {
-    transform: translateY(-6px);
-    border-color: var(--warm);
-    box-shadow: var(--shadow-md);
-  }
-  .pricing-card.selected {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 4px rgba(232,83,60,.12);
-    transform: translateY(-6px);
-  }
+  .pricing-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); }
   .pricing-card.featured-plan {
     border-color: var(--gold);
-    background: linear-gradient(160deg, #fff 60%, rgba(200,169,126,.06));
+    background: linear-gradient(160deg,#fff 60%,rgba(200,169,126,.06));
     transform: translateY(-8px);
     box-shadow: var(--shadow-md);
   }
-  .pricing-card.featured-plan.selected {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 4px rgba(232,83,60,.12), var(--shadow-md);
+  .plan-badge { display:inline-block; background:var(--gold); color:white; font-size:.7rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; padding:4px 12px; border-radius:100px; margin-bottom:16px; }
+  .plan-name { font-family:var(--serif); font-size:1.3rem; font-weight:700; color:var(--dark); margin-bottom:8px; }
+  .plan-price { font-family:var(--serif); font-size:2.8rem; font-weight:900; color:var(--dark); line-height:1; margin-bottom:14px; }
+  .plan-desc { font-size:.88rem; color:var(--soft); line-height:1.6; margin-bottom:24px; min-height:48px; }
+  .plan-features { list-style:none; display:flex; flex-direction:column; gap:10px; margin-bottom:28px; }
+  .plan-features li { font-size:.88rem; color:var(--mid); font-weight:500; }
+  .plan-btn {
+    display:block; width:100%; text-align:center;
+    background:var(--accent); color:white;
+    font-family:var(--sans); font-weight:700; font-size:.95rem;
+    padding:14px; border-radius:8px; text-decoration:none;
+    transition:background .2s, transform .2s, box-shadow .2s;
+    box-shadow:0 4px 16px rgba(232,83,60,.25);
   }
-  .plan-badge {
-    display: inline-block;
-    background: var(--gold);
-    color: white;
-    font-size: .7rem;
-    font-weight: 700;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    padding: 4px 12px;
-    border-radius: 100px;
-    margin-bottom: 16px;
-  }
-  .plan-name {
-    font-family: var(--serif);
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: var(--dark);
-    margin-bottom: 8px;
-  }
-  .plan-price {
-    font-family: var(--serif);
-    font-size: 2.8rem;
-    font-weight: 900;
-    color: var(--dark);
-    line-height: 1;
-    margin-bottom: 14px;
-  }
-  .plan-desc {
-    font-size: .88rem;
-    color: var(--soft);
-    line-height: 1.6;
-    margin-bottom: 24px;
-    min-height: 48px;
-  }
-  .plan-features {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 28px;
-  }
-  .plan-features li {
-    font-size: .88rem;
-    color: var(--mid);
-    font-weight: 500;
-  }
-  .plan-select-btn {
-    width: 100%;
-    text-align: center;
-    background: var(--sand);
-    color: var(--dark);
-    font-weight: 700;
-    font-size: .9rem;
-    padding: 13px;
-    border-radius: 8px;
-    transition: background .2s, color .2s;
-  }
-  .pricing-card:hover .plan-select-btn,
-  .pricing-card.selected .plan-select-btn {
-    background: var(--accent);
-    color: white;
-  }
-  .pricing-card.featured-plan .plan-select-btn {
-    background: var(--gold);
-    color: white;
-  }
-  .pricing-card.featured-plan.selected .plan-select-btn,
-  .pricing-card.featured-plan:hover .plan-select-btn {
-    background: var(--accent);
-    color: white;
-  }
-
-  /* Order Form */
-  .order-form-inner {
-    max-width: 720px;
-    margin: 56px auto 0;
-    background: white;
-    border: 1px solid rgba(200,169,126,.2);
-    border-radius: 20px;
-    padding: 44px 40px;
-    box-shadow: var(--shadow-md);
-  }
-  .order-form-title {
-    font-family: var(--serif);
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--dark);
-    margin-bottom: 28px;
-  }
-  .order-form-inner .form-group label { color: var(--soft); }
-  .order-form-inner input,
-  .order-form-inner textarea {
-    background: var(--cream);
-    border: 1px solid rgba(200,169,126,.3);
-    border-radius: 8px;
-    padding: 13px 16px;
-    color: var(--dark);
-    font-family: var(--sans);
-    font-size: .95rem;
-    width: 100%;
-    outline: none;
-    transition: border-color .2s;
-  }
-  .order-form-inner input:focus,
-  .order-form-inner textarea:focus { border-color: var(--warm); }
-  .order-form-inner input::placeholder,
-  .order-form-inner textarea::placeholder { color: rgba(26,21,16,.3); }
-  .order-form-inner textarea { resize: vertical; min-height: 90px; }
-  .order-summary {
-    background: var(--sand);
-    border-radius: 12px;
-    padding: 20px 24px;
-    margin-top: 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .order-summary-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: .92rem;
-    color: var(--mid);
-    font-weight: 500;
-  }
-
-  @media (max-width: 900px) {
-    .pricing-grid { grid-template-columns: 1fr; }
-    .pricing-card.featured-plan { transform: none; }
-    .order-form-inner { padding: 28px 20px; }
-  }
+  .plan-btn:hover { background:#d4432c; transform:translateY(-2px); box-shadow:0 6px 20px rgba(232,83,60,.4); }
+  .pricing-card.featured-plan .plan-btn { background:var(--gold); box-shadow:0 4px 16px rgba(184,131,58,.3); }
+  .pricing-card.featured-plan .plan-btn:hover { background:#a07230; }
+  @media (max-width:900px) { .pricing-grid { grid-template-columns:1fr; } .pricing-card.featured-plan { transform:none; } }
 </style>
 
 
@@ -1684,7 +1485,7 @@
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   document.addEventListener('DOMContentLoaded', function() {
 
     // ── Pricing plan selection ──────────────────────────────
@@ -1815,13 +1616,4 @@
       el.style.opacity = '0';
       el.style.transform = 'translateY(20px)';
       el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-      revealObserver.observe(el);
-    });
-
-  }); // end DOMContentLoaded
-
-  // Animate stat numbers on scroll
-  const statObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        ent
+      revealObs
