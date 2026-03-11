@@ -1661,7 +1661,14 @@
           <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=shaq.sahbi1%40gmail.com&item_name=HostLift+AI+Pricing+Estimator&amount=4.99&currency_code=USD&no_shipping=1&return=https%3A%2F%2Fhostlift.online%2F%23ai-pricing" target="_blank" class="ai-pay-btn" id="aiPayBtn">
             Unlock with PayPal — $4.99
           </a>
-          <button class="ai-already-paid" onclick="unlockTool()">I already paid → Access the tool</button>
+          <div style="margin-top:16px;">
+            <div style="font-size:.8rem;color:rgba(249,245,238,.4);margin-bottom:8px;">Already paid? Enter your unlock code:</div>
+            <div style="display:flex;gap:8px;">
+              <input type="text" id="unlockCodeInput" placeholder="Enter code (e.g. K7M2NQ)" maxlength="6" style="flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(200,169,126,.2);border-radius:8px;padding:11px 14px;color:var(--cream);font-family:monospace;font-size:1rem;letter-spacing:.15em;outline:none;text-transform:uppercase;" />
+              <button onclick="unlockTool()" style="background:rgba(200,169,126,.2);border:1px solid rgba(200,169,126,.3);color:var(--warm);font-family:var(--sans);font-weight:700;font-size:.85rem;padding:11px 18px;border-radius:8px;cursor:pointer;white-space:nowrap;transition:background .2s;">Unlock →</button>
+            </div>
+            <div id="unlockError" style="display:none;color:#f87171;font-size:.8rem;margin-top:8px;"></div>
+          </div>
         </div>
         <div class="ai-gate-right">
           <div class="ai-preview-card">
@@ -1847,6 +1854,37 @@
 
 <script>
   function unlockTool() {
+    var input = document.getElementById('unlockCodeInput').value.trim().toUpperCase();
+    var errorEl = document.getElementById('unlockError');
+
+    // Valid codes pool
+    var validCodes = ['85K0CA','FRIYG5','AHTBPW','YOU625','XGRX88','VSW5WG','XV9JDX','AXXYGC','MAGGGF','WC95B9','JLOS5J','83WD70','X71MDG','GRQBTW','3VUB6D','TYQXGP','P49PB5','0CUQX8','NOM5HK','C5DJ8E','I71PZA','7A7DDG','JVPW9B','O8NNUX','ILOWVL','Y95KPJ','F5YGFG','6L24AN','GSPAYZ','H8HTLU','C9T9KM','AL2FEF','BZVU4Y','DA1040','PHK5QI','D1UKII','T2W956','PH4ORV','5CMYSP','7EQ6XU','A7PQKQ','TA9NOV','E3QLQY','N5LXL7','K2FO99','5GYQUG','UVHMMI','2TBQI2','EC047Y','Q4JH8X'];
+
+    // Get used codes from sessionStorage
+    var usedCodes = JSON.parse(sessionStorage.getItem('hl_used_codes') || '[]');
+
+    if (!input) {
+      errorEl.textContent = 'Please enter your unlock code.';
+      errorEl.style.display = 'block';
+      return;
+    }
+    if (!validCodes.includes(input)) {
+      errorEl.textContent = 'Invalid code. Please check the code we emailed you.';
+      errorEl.style.display = 'block';
+      return;
+    }
+    if (usedCodes.includes(input)) {
+      errorEl.textContent = 'This code has already been used. Each code is valid for one session only.';
+      errorEl.style.display = 'block';
+      return;
+    }
+
+    // Mark as used
+    usedCodes.push(input);
+    sessionStorage.setItem('hl_used_codes', JSON.stringify(usedCodes));
+
+    // Unlock
+    errorEl.style.display = 'none';
     document.getElementById('aiPayGate').style.display = 'none';
     document.getElementById('aiTool').style.display = 'block';
     document.getElementById('aiTool').scrollIntoView({ behavior: 'smooth', block: 'start' });
