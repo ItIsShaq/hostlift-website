@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HostLift — Airbnb Listing Optimization Agency</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
@@ -1336,7 +1337,7 @@
           <div style="font-family:var(--serif);font-size:1.4rem;font-weight:700;color:var(--cream);margin-bottom:10px;">Audit Request Received!</div>
           <div style="color:rgba(249,245,238,.55);font-size:.95rem;">Our team will review your listing and send your personalized audit within 48 hours.</div>
         </div>
-        <div id="formError" style="display:none;margin-top:14px;text-align:center;font-size:.85rem;color:#f87171;">Something went wrong. Please try again or email us at contact@hostlift.online</div>
+        <div id="formError" style="display:none;margin-top:14px;text-align:center;font-size:.85rem;color:#f87171;">Something went wrong. Please try again or email us at <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0c6f6362786d6f784c64637f7860656a7822636260656269">[email&#160;protected]</a></div>
       </div>
     </div>
   </div>
@@ -1364,7 +1365,7 @@
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   // Nav scroll effect
   const navbar = document.getElementById('navbar');
   window.addEventListener('scroll', () => {
@@ -1394,27 +1395,40 @@
 
     btn.textContent = 'Sending…';
     btn.disabled = true;
+    errorMsg.style.display = 'none';
+
+    const data = {
+      firstName:  form.firstName.value,
+      lastName:   form.lastName.value,
+      email:      form.email.value,
+      listingUrl: form.listingUrl.value,
+      city:       form.city.value,
+      message:    form.message.value,
+    };
 
     try {
-      const response = await fetch(form.action, {
+      const response = await fetch('https://formspree.io/f/xreypnkw', {
         method: 'POST',
-        body: new FormData(form),
-        headers: { 'Accept': 'application/json' }
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(data)
       });
 
-      if (response.ok) {
+      const result = await response.json();
+
+      if (response.ok && result.ok) {
         form.style.display = 'none';
-        if (errorMsg) errorMsg.style.display = 'none';
         success.style.display = 'block';
       } else {
-        throw new Error('Server error');
+        throw new Error(result.error || 'Formspree rejected the submission');
       }
     } catch (err) {
+      console.error('Formspree error:', err);
       btn.textContent = '✦ Send My Free Audit Request';
       btn.disabled = false;
-      if (errorMsg) {
-        errorMsg.style.display = 'block';
-      }
+      errorMsg.style.display = 'block';
     }
   }
 
@@ -1440,13 +1454,4 @@
   const statObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        entry.target.classList.add('counted');
-        statObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.5 });
-
-  document.querySelectorAll('.stat-item').forEach(el => statObserver.observe(el));
-</script>
-</body>
-</html>
+        ent
