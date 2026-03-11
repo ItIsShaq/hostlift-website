@@ -1692,7 +1692,7 @@
 
     document.getElementById('orderPlanInput').value = planId;
     document.getElementById('orderPriceInput').value = price;
-    document.getElementById('orderPlanLabel').textContent = planId.replace('listings', ' Listings').replace('listing', ' Listing') + ' — ' + price;
+    document.getElementById('orderPlanLabel').textContent = numListings + (numListings === 1 ? ' Listing' : ' Listings') + ' — ' + price;
     document.getElementById('summaryPlan').textContent = numListings + (numListings === 1 ? ' Listing' : ' Listings');
     document.getElementById('summaryPrice').textContent = price;
 
@@ -1702,15 +1702,25 @@
     for (let i = 1; i <= numListings; i++) {
       container.innerHTML += `
         <div class="form-group">
-          <label>Airbnb Listing URL ${numListings > 1 ? '#' + i : ''}</label>
+          <label>Airbnb Listing URL${numListings > 1 ? ' #' + i : ''}</label>
           <input type="url" name="listing_url_${i}" placeholder="https://airbnb.com/rooms/..." required />
         </div>`;
     }
 
     const wrap = document.getElementById('orderFormWrap');
     wrap.style.display = 'block';
-    setTimeout(() => wrap.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+    setTimeout(() => wrap.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150);
   }
+
+  // Attach click handlers after DOM is ready
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.pricing-card').forEach(function(card) {
+      card.addEventListener('click', function() {
+        const onclick = card.getAttribute('onclick');
+        if (onclick) eval(onclick.replace('selectPlan(this,', 'selectPlan(card,'));
+      });
+    });
+  });
 
   // Order form submission → Formspree then PayPal
   async function handleOrderSubmit(e) {
