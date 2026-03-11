@@ -1276,7 +1276,7 @@
     <div class="pricing-grid">
 
       <!-- Plan 1 -->
-      <div class="pricing-card" onclick="selectPlan(this, '1listing', '$59.99', 1)">
+      <div class="pricing-card" data-plan="1listing" data-price="59.99" data-label="$59.99" data-num="1">
         <div class="plan-name">Starter</div>
         <div class="plan-price">$59.99</div>
         <div class="plan-desc">Perfect for hosts with a single property ready to dominate their market.</div>
@@ -1292,7 +1292,7 @@
       </div>
 
       <!-- Plan 2 -->
-      <div class="pricing-card featured-plan" onclick="selectPlan(this, '2listings', '$99.99', 2)">
+      <div class="pricing-card featured-plan" data-plan="2listings" data-price="99.99" data-label="$99.99" data-num="2">
         <div class="plan-badge">Most Popular</div>
         <div class="plan-name">Growth</div>
         <div class="plan-price">$99.99</div>
@@ -1310,7 +1310,7 @@
       </div>
 
       <!-- Plan 3 -->
-      <div class="pricing-card" onclick="selectPlan(this, '5listings', '$199.99', 5)">
+      <div class="pricing-card" data-plan="5listings" data-price="199.99" data-label="$199.99" data-num="5">
         <div class="plan-name">Portfolio</div>
         <div class="plan-price">$199.99</div>
         <div class="plan-desc">Built for serious hosts with multiple properties who want maximum revenue.</div>
@@ -1685,32 +1685,38 @@
 </footer>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  // Pricing plan selection
-  function selectPlan(card, planId, price, numListings) {
-    document.querySelectorAll('.pricing-card').forEach(c => c.classList.remove('selected'));
-    card.classList.add('selected');
+  // Pricing plan selection — clean data-attribute approach
+  document.querySelectorAll('.pricing-card').forEach(function(card) {
+    card.addEventListener('click', function() {
+      var plan      = card.getAttribute('data-plan');
+      var price     = card.getAttribute('data-price');
+      var label     = card.getAttribute('data-label');
+      var num       = parseInt(card.getAttribute('data-num'));
 
-    document.getElementById('orderPlanInput').value = planId;
-    document.getElementById('orderPriceInput').value = price;
-    document.getElementById('orderPlanLabel').textContent = numListings + (numListings === 1 ? ' Listing' : ' Listings') + ' — ' + price;
-    document.getElementById('summaryPlan').textContent = numListings + (numListings === 1 ? ' Listing' : ' Listings');
-    document.getElementById('summaryPrice').textContent = price;
+      document.querySelectorAll('.pricing-card').forEach(function(c) { c.classList.remove('selected'); });
+      card.classList.add('selected');
 
-    // Generate listing URL fields
-    const container = document.getElementById('listingUrlFields');
-    container.innerHTML = '';
-    for (let i = 1; i <= numListings; i++) {
-      container.innerHTML += `
-        <div class="form-group">
-          <label>Airbnb Listing URL${numListings > 1 ? ' #' + i : ''}</label>
-          <input type="url" name="listing_url_${i}" placeholder="https://airbnb.com/rooms/..." required />
-        </div>`;
-    }
+      document.getElementById('orderPlanInput').value  = plan;
+      document.getElementById('orderPriceInput').value = price;
+      document.getElementById('orderPlanLabel').textContent = num + (num === 1 ? ' Listing' : ' Listings') + ' — ' + label;
+      document.getElementById('summaryPlan').textContent    = num + (num === 1 ? ' Listing' : ' Listings');
+      document.getElementById('summaryPrice').textContent   = label;
 
-    const wrap = document.getElementById('orderFormWrap');
-    wrap.style.display = 'block';
-    setTimeout(() => wrap.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150);
-  }
+      var container = document.getElementById('listingUrlFields');
+      container.innerHTML = '';
+      for (var i = 1; i <= num; i++) {
+        var div = document.createElement('div');
+        div.className = 'form-group';
+        div.innerHTML = '<label>Airbnb Listing URL' + (num > 1 ? ' #' + i : '') + '</label>' +
+          '<input type="url" name="listing_url_' + i + '" placeholder="https://airbnb.com/rooms/..." required />';
+        container.appendChild(div);
+      }
+
+      var wrap = document.getElementById('orderFormWrap');
+      wrap.style.display = 'block';
+      setTimeout(function() { wrap.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 150);
+    });
+  });
 
   // Attach click handlers after DOM is ready
   document.addEventListener('DOMContentLoaded', function() {
